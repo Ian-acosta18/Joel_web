@@ -2,9 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\empleadoscontroller;
-use App\Http\Controllers\examenjaimecontroller;
+// CAMBIO IMPORTANTE: Ahora usamos el controlador de Ian
+use App\Http\Controllers\exameniancontroller;
 
-// --- Rutas de Empleados (Déjalas igual) ---
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// --- Rutas de Empleados (Se quedan igual) ---
 Route::get('inicio',[empleadoscontroller::class,'inicio'])->name('inicio');
 Route::get('reporteempleados',[empleadoscontroller::class,'reporteempleados'])->name('reporteempleados');
 Route::get('altaempleado',[empleadoscontroller::class,'altaempleado'])->name('altaempleado');
@@ -15,10 +22,17 @@ Route::get('eliminaempleado',[empleadoscontroller::class,'eliminaempleado'])->na
 Route::get('editaempleado',[empleadoscontroller::class,'editaempleado'])->name('editaempleado');
 Route::post('actualizaemp',[empleadoscontroller::class,'actualizaemp'])->name('actualizaemp');
 
-// --- Rutas de Examen Jaime (CORREGIDAS) ---
 
-// 1. Ruta para ver el reporte (apunta a 'index')
-Route::get('reportejaime', [examenjaimecontroller::class, 'index'])->name('reporte.jaime');
+// --- Rutas de Examen Ian (ACTUALIZADAS) ---
 
-// 2. Ruta para eliminar (apunta a 'destroy')
-Route::delete('/animal/{id}', [examenjaimecontroller::class, 'destroy'])->name('animal.destroy');
+// 1. Ruta para ver el reporte
+// He cambiado 'reportejaime' por 'reporteian' y el controlador a exameniancontroller
+Route::get('reporteian', [exameniancontroller::class, 'index'])->name('reporte.ian');
+
+// 2. Ruta para eliminar
+// He actualizado el controlador a exameniancontroller
+Route::delete('/animal/{id}', [exameniancontroller::class, 'destroy'])->name('animal.destroy');
+
+
+// OPCIONAL: Si quieres que esta sea la página principal al abrir la web
+Route::get('/', [exameniancontroller::class, 'index'])->name('home.examen');
