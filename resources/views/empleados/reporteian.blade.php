@@ -2,56 +2,63 @@
 <html>
 <head>
     <title>Reporte de Animales</title>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
-        img { width: 100px; height: auto; border-radius: 5px; }
-        .btn-eliminar { background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: center; border: 1px solid #ddd; }
+        img { border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>Reporte de Animales</h1>
-    
-    @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
+    <div class="container">
+        <h1 class="mt-4">Reporte de Animales</h1>
+        
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-    <table>
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Especie</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($animales as $animal)
-            <tr>
-                <td>
-                    <img src="{{ asset('imagenes/' . $animal->foto) }}" alt="{{ $animal->nombre }}">
-                </td>
-                <td>{{ $animal->nombre }}</td>
-                <td>
-                    {{ $animal->especie ? $animal->especie->nombre : 'Sin asignar' }}
-                </td>
-                <td>
-                    <form action="{{ route('animal.destroy', $animal->ida) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-eliminar" onclick="return confirm('¿Seguro que quieres eliminar al {{ $animal->nombre }}?')">
-                            Eliminar
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="4">No hay animales registrados.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Clave (IDA)</th>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($animales as $animal)
+                <tr>
+                    <td>{{ $animal->ida }}</td>
+                    
+                    <td>
+                        <img src="{{ asset('imagenes/' . $animal->foto) }}" alt="{{ $animal->nombre }}" width="50" height="50">
+                    </td>
+                    
+                    <td>{{ $animal->nombre }}</td>
+                    
+                    <td>
+                        {{ $animal->especie ? $animal->especie->nombre : 'Sin especie' }}
+                    </td>
+                    
+                    <td>
+                        <form action="{{ route('animal.destroy', $animal->ida) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar a {{ $animal->nombre }}?')">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5">No hay animales registrados.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
